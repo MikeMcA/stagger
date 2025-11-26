@@ -819,7 +819,7 @@ class PIC(PictureFrame):
         elif self.format.upper() == "JPG":
             mime = "image/jpeg"
         else:
-            mime = imghdr.what(io.StringIO(self.data))
+            mime = imghdr.what(None, self.data[:32])
             if mime is None:
                 raise ValueError("Unknown image format")
             mime = "image/" + mime.lower()
