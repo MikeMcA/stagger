@@ -38,7 +38,7 @@ import io
 import imghdr
 import zlib
 
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 from warnings import warn
 from contextlib import contextmanager
 
@@ -348,25 +348,138 @@ class Tag(collections.abc.MutableMapping, metaclass=abc.ABCMeta):
                         "sort-composer",
                         ]
 
-    title = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    date = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    album_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    album = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    track = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    track_total = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    disc = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    disc_total = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    composer = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    genre = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    comment = abstractproperty(fget=lambda self: Non, fset=lambda self, value: None)
-    grouping = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    picture = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_title = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_album_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_album = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_composer = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
+    @property
+    @abstractmethod
+    def title(self): pass
+    @title.setter
+    @abstractmethod
+    def title(self, value): pass
+
+    @property
+    @abstractmethod
+    def artist(self): pass
+    @artist.setter
+    @abstractmethod
+    def artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def date(self): pass
+    @date.setter
+    @abstractmethod
+    def date(self, value): pass
+
+    @property
+    @abstractmethod
+    def album_artist(self): pass
+    @album_artist.setter
+    @abstractmethod
+    def album_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def album(self): pass
+    @album.setter
+    @abstractmethod
+    def album(self, value): pass
+
+    @property
+    @abstractmethod
+    def track(self): pass
+    @track.setter
+    @abstractmethod
+    def track(self, value): pass
+
+    @property
+    @abstractmethod
+    def track_total(self): pass
+    @track_total.setter
+    @abstractmethod
+    def track_total(self, value): pass
+
+    @property
+    @abstractmethod
+    def disc(self): pass
+    @disc.setter
+    @abstractmethod
+    def disc(self, value): pass
+
+    @property
+    @abstractmethod
+    def disc_total(self): pass
+    @disc_total.setter
+    @abstractmethod
+    def disc_total(self, value): pass
+
+    @property
+    @abstractmethod
+    def composer(self): pass
+    @composer.setter
+    @abstractmethod
+    def composer(self, value): pass
+
+    @property
+    @abstractmethod
+    def genre(self): pass
+    @genre.setter
+    @abstractmethod
+    def genre(self, value): pass
+
+    @property
+    @abstractmethod
+    def comment(self): pass
+    @comment.setter
+    @abstractmethod
+    def comment(self, value): pass
+
+    @property
+    @abstractmethod
+    def grouping(self): pass
+    @grouping.setter
+    @abstractmethod
+    def grouping(self, value): pass
+
+    @property
+    @abstractmethod
+    def picture(self): pass
+    @picture.setter
+    @abstractmethod
+    def picture(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_title(self): pass
+    @sort_title.setter
+    @abstractmethod
+    def sort_title(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_artist(self): pass
+    @sort_artist.setter
+    @abstractmethod
+    def sort_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_album_artist(self): pass
+    @sort_album_artist.setter
+    @abstractmethod
+    def sort_album_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_album(self): pass
+    @sort_album.setter
+    @abstractmethod
+    def sort_album(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_composer(self): pass
+    @sort_composer.setter
+    @abstractmethod
+    def sort_composer(self, value): pass
 
     def __friendly_text_collect(self, frameid):
         """Collect text values from all instances of FRAMEID into a single list.
