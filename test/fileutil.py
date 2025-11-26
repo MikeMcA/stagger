@@ -49,7 +49,7 @@ class FileutilTestCase(unittest.TestCase):
                 # Verify that KeyboardInterrupts are deferred
                 # until the end of this block.
                 foo += 1
-                os.kill(0, signal.SIGINT)  # Simulate C-c
+                os.kill(os.getpid(), signal.SIGINT)  # Simulate C-c
                 foo += 1
         except KeyboardInterrupt:
             # This should be triggered, but only after the second increment.
