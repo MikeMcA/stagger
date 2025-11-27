@@ -33,12 +33,11 @@
 """List of frames defined in the various ID3 versions.
 """
 
-import imghdr
-
 import stagger.tags as tags
 from stagger.frames import *
 from stagger.specs import *
 from stagger.tags import frameclass
+from stagger.util import detect_image_format
 
 
 # ID3v2.4
@@ -421,8 +420,8 @@ class APIC(PictureFrame):
                    data=self.data)
             
     def _str_fields(self):
-        img = "{0} bytes of {1} data".format(len(self.data), 
-                                             imghdr.what(None, self.data[:32]))
+        img = "{0} bytes of {1} data".format(len(self.data),
+                                             detect_image_format(self.data[:32]))
         return ("type={0}, desc={1}, mime={2}: {3}"
                 .format(repr(self._spec("type").to_str(self.type)),
                         repr(self.desc),
@@ -819,15 +818,15 @@ class PIC(PictureFrame):
         elif self.format.upper() == "JPG":
             mime = "image/jpeg"
         else:
-            mime = imghdr.what(None, self.data[:32])
+            mime = detect_image_format(self.data[:32])
             if mime is None:
                 raise ValueError("Unknown image format")
             mime = "image/" + mime.lower()
         return APIC(mime=mime, type=self.type, desc=self.desc, data=self.data)
-        
+
     def _str_fields(self):
-        img = "{0} bytes of {1} data".format(len(self.data), 
-                                             imghdr.what(None, self.data[:32]))
+        img = "{0} bytes of {1} data".format(len(self.data),
+                                             detect_image_format(self.data[:32]))
         return ("type={0}, desc={1}, format={2}: {3}"
                 .format(repr(self._spec("type").to_str(self.type)),
                         repr(self.desc),

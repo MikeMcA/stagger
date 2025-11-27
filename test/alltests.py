@@ -44,6 +44,7 @@ import test.tag
 import test.friendly
 import test.id3v1
 import test.id3v1_fileop
+import test.test_stringio_bug
 
 suite = unittest.TestSuite()
 suite.addTest(test.fileutil.suite)
@@ -54,6 +55,7 @@ suite.addTest(test.tag.suite)
 suite.addTest(test.friendly.suite)
 suite.addTest(test.id3v1.suite)
 suite.addTest(test.id3v1_fileop.suite)
+suite.addTest(test.test_stringio_bug.suite)
 
 if __name__ == "__main__":
     warnings.simplefilter("always", stagger.Warning)

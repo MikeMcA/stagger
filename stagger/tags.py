@@ -35,7 +35,6 @@ import struct
 import re
 import collections.abc
 import io
-import imghdr
 import zlib
 
 from abc import abstractmethod
@@ -44,6 +43,7 @@ from contextlib import contextmanager
 
 from stagger.errors import *
 from stagger.conversion import *
+from stagger.util import detect_image_format
 
 import stagger.frames as Frames
 import stagger.fileutil as fileutil
@@ -629,7 +629,7 @@ class Tag(collections.abc.MutableMapping, metaclass=abc.ABCMeta):
                                  .format(f._spec("type").to_str(f.type),
                                          f.desc,
                                          len(f.data),
-                                         imghdr.what(None, f.data[:32]))
+                                         detect_image_format(f.data[:32]))
                                  for f in self[frameid])
         def setter(self, value):
             if len(value) > 0:

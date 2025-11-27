@@ -36,6 +36,32 @@ from contextlib import contextmanager
 
 import stagger
 
+def detect_image_format(data):
+    """
+    Detect image format from binary data by checking magic bytes.
+    Replacement for deprecated imghdr.what().
+
+    Returns format name (e.g., 'jpeg', 'png', 'gif') or None if unknown.
+    """
+    if not data or len(data) < 4:
+        return None
+
+    # Check magic bytes for common image formats
+    if data[:2] == b'\xff\xd8':
+        return 'jpeg'
+    elif data[:8] == b'\x89PNG\r\n\x1a\n':
+        return 'png'
+    elif data[:6] in (b'GIF87a', b'GIF89a'):
+        return 'gif'
+    elif data[:2] in (b'II', b'MM'):  # TIFF (little/big endian)
+        return 'tiff'
+    elif data[:2] == b'BM':
+        return 'bmp'
+    elif data[:4] == b'RIFF' and len(data) >= 12 and data[8:12] == b'WEBP':
+        return 'webp'
+
+    return None
+
 def python_version_check():
     if sys.version_info[0:3] == (3, 1, 0):
         print("There are data corruption issues with Python 3.1.0's io module; \n"

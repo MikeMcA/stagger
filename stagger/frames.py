@@ -34,12 +34,12 @@
 
 import abc
 import collections.abc
-import imghdr
 from abc import abstractmethod
 from warnings import warn
 
 from stagger.errors import *
 from stagger.specs import *
+from stagger.util import detect_image_format
 
 class Frame(metaclass=abc.ABCMeta):
     _framespec = tuple()
@@ -305,7 +305,7 @@ class PictureFrame(Frame):
                 self.data = file.read()
                 self.type = 0
                 self.desc = ""
-                format = imghdr.what(None, self.data[:32])
+                format = detect_image_format(self.data[:32])
                 if not format:
                     format = value.rpartition(".")[2]
                 self._set_format(format)
