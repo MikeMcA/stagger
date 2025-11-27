@@ -32,7 +32,6 @@
 
 """File manipulation utilities."""
 
-import io
 import os.path
 import shutil
 import tempfile

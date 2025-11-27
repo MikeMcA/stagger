@@ -32,7 +32,6 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 import unittest
-import io
 import random
 import tempfile
 import warnings

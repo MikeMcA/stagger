@@ -39,7 +39,6 @@ import textwrap
 from optparse import OptionParser, OptionGroup
 
 import stagger
-import stagger.fileutil
 from stagger.id3 import *
 
 def create_parser():

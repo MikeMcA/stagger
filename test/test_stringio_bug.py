@@ -5,9 +5,7 @@
 #
 
 import unittest
-import io
 
-import stagger
 from stagger.id3 import PIC, APIC
 
 
@@ -19,7 +17,7 @@ class StringIOBugTestCase(unittest.TestCase):
         of the correct pattern imghdr.what(None, data[:32]) when converting
         PIC frames with non-PNG/JPG formats to APIC.
 
-        Fixed in: id3.py:822
+        Fixed in: id3.py:822   MBM
         """
         # Create a minimal GIF header (GIF89a)
         gif_data = b'GIF89a' + b'\x00' * 100

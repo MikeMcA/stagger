@@ -66,8 +66,6 @@ import re
 import string
 import urllib.request
 import tarfile
-import random
-import io
 import warnings
 
 from stagger.errors import *
