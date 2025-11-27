@@ -791,7 +791,7 @@ class Tag(collections.abc.MutableMapping, metaclass=abc.ABCMeta):
             try:
                 data = data.encode("ASCII")
             except UnicodeEncodeError:
-                return false
+                return False
         # Allow a single space at end of four-character ids
         # Some programs (e.g. iTunes 8.2) generate such frames when converting
         # from 2.2 to 2.3/2.4 tags.
