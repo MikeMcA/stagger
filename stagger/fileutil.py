@@ -122,7 +122,7 @@ def _replace_chunk(filename, offset, length, chunk, in_place, max_mem):
             return
 
         if in_place:
-            _replace_chunk_in_place(file, offset, length, chunk, oldsize, newsize)
+            _replace_chunk_in_place(file, offset, length, chunk, oldsize, newsize, max_mem)
         else: # not in_place
             temp = tempfile.NamedTemporaryFile(dir=os.path.dirname(filename),
                                                prefix="stagger-",
@@ -152,7 +152,7 @@ def _copy_chunk(src, dst, length):
         dst.write(buf)
         length -= l
 
-def _replace_chunk_in_place(file, offset, length, chunk, oldsize, newsize):
+def _replace_chunk_in_place(file, offset, length, chunk, oldsize, newsize, max_mem):
     if newsize > oldsize:
         file.seek(0, 2)
         file.write(b"\x00" * (len(chunk) - length))
