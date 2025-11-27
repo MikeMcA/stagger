@@ -132,11 +132,6 @@ class Frame(metaclass=abc.ABCMeta):
                                      "to ID3v2.{1} format".format(self.frameid, version))
 
     def _encode(self, encodings=("latin-1", "utf-16")):
-        # if getattr(self, "_bozo", False):
-        #     warn("{0}: Frame type is not widely implemented, "
-        #          "its use is discouraged".format(self.frameid), 
-        #          BozoFrameWarning)
-        
         def encode_fields():
             data = bytearray()
             for spec in self._framespec:
@@ -271,9 +266,6 @@ class TextFrame(Frame):
 
     def _str_fields(self):
         return ", ".join(repr(t) for t in self.text)
-#        return "{0} {1}".format((EncodedStringSpec._encodings[self.encoding][0] 
-#                                if self.encoding is not None else "<undef>"),
-#                                ", ".join(repr(t) for t in self.text))
 
     @classmethod
     def _merge(cls, frames):
