@@ -45,8 +45,7 @@ class StringIOBugTestCase(unittest.TestCase):
         self.assertEqual(apic.data, gif_data)
 
 
-suite = unittest.TestSuite()
-suite.addTest(unittest.makeSuite(StringIOBugTestCase))
+suite = unittest.TestLoader().loadTestsFromTestCase(StringIOBugTestCase)
 
 if __name__ == '__main__':
     unittest.main()
