@@ -38,6 +38,7 @@ import warnings
 import os
 import signal
 
+import stagger
 from stagger.fileutil import *
 
 class FileutilTestCase(unittest.TestCase):

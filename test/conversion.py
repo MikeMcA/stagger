@@ -36,6 +36,7 @@ import random
 import io
 import warnings
 
+import stagger
 from stagger.errors import *
 from stagger.conversion import *
 
