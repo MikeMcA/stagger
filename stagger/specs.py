@@ -228,7 +228,7 @@ class BinaryDataSpec(Spec):
     def validate(self, frame, value):
         if value is None:
             return bytes()
-        if not isinstance(value, collections.abc.ByteString):
+        if not isinstance(value, (bytes, bytearray)):
             raise TypeError("Not a byte sequence")
         return value
     def to_str(self, value):
