@@ -42,25 +42,22 @@ import stagger
 from stagger.fileutil import *
 
 class FileutilTestCase(unittest.TestCase):
+    @unittest.skipUnless(hasattr(signal, 'SIGINT') and hasattr(os, 'kill'),
+                         "Signal handling not available on this platform")
     def testSuppressInterrupt(self):
-        foo = 0
+        """Test that SIGINT is deferred until after the context manager exits."""
+        executed_after_signal = False
+        interrupt_raised = False
+
         try:
             with suppress_interrupt():
-                # Verify that KeyboardInterrupts are deferred
-                # until the end of this block.
-                foo += 1
-                os.kill(os.getpid(), signal.SIGINT)  # Simulate C-c
-                foo += 1
+                os.kill(os.getpid(), signal.SIGINT)
+                executed_after_signal = True  # Should happen despite SIGINT
         except KeyboardInterrupt:
-            # This should be triggered, but only after the second increment.
-            foo += 1
-        except AttributeError:
-            # There is no os.kill on Windows: we can't test this feature there.
-            return
-        except WindowsError:
-            # Ditto
-            return
-        self.assertEqual(foo, 3, "Can't suppress interrupts")
+            interrupt_raised = True
+
+        self.assertTrue(executed_after_signal, "Code after signal should execute")
+        self.assertTrue(interrupt_raised, "KeyboardInterrupt should be raised after context")
 
     def testReplaceChunk(self):
         def compare(data, filename):
