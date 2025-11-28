@@ -35,9 +35,9 @@ from setuptools import setup
 
 setup(
     name="stagger",
-    version="1.0.1",
+    version="2.0.0",
     python_requires=">=3.9",
-    url="http://github.com/lorentey/stagger",
+    url="http://github.com/MikeMcA/stagger",
     author="Karoly Lorentey",
     author_email="karoly@lorentey.hu",
     packages=["stagger"],
