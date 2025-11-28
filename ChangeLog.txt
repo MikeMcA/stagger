@@ -1,3 +1,23 @@
+2025-11-27  Mike McA  <mikemca.github@gmail.com>
+
+	* Version 2.0.0 released.
+
+	* BREAKING CHANGE: Minimum Python version is now 3.9.
+
+	* Removed dependency on deprecated imghdr module (removed in Python 3.13).
+
+	* Compatibility updates for Python 3.9+:
+	  - Migrated from deprecated collections module to collections.abc
+	  - Updated test suite to avoid deprecated features
+
+	* Bug fixes:
+	  - Fixed PIC to APIC frame conversion for non-PNG/JPG image formats
+
+	* Test suite improvements:
+	  - Rewrote signal handling test with clearer logic
+	  - Added missing stagger module imports in test files
+	  - All tests now pass on Python 3.9 through 3.14
+
 2009-06-14  Lőrentey Károly  <lorentey@elte.hu>
 
 	* Initial version.

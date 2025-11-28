@@ -40,7 +40,6 @@ class UnknownFrameWarning(FrameWarning): pass
 class EmptyFrameWarning(FrameWarning): pass
 class DuplicateFrameWarning(FrameWarning): pass
 class UntestedFrameWarning(FrameWarning): pass
-class BozoFrameWarning(FrameWarning): pass
 
 class TagWarning(Warning): pass
 

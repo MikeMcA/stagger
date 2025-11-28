@@ -3,3 +3,4 @@ dist
 __pycache__
 *.egg-info
 test/id3v1_test_suite.tar.gz
+.claude

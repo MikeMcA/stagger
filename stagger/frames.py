@@ -33,13 +33,13 @@
 """Class definitions for ID3v2 frames."""
 
 import abc
-import collections
-import imghdr
+import collections.abc
 from abc import abstractmethod
 from warnings import warn
 
 from stagger.errors import *
 from stagger.specs import *
+from stagger.util import detect_image_format
 
 class Frame(metaclass=abc.ABCMeta):
     _framespec = tuple()
@@ -114,7 +114,7 @@ class Frame(metaclass=abc.ABCMeta):
         "Returns true if this frame is in any of the specified versions of ID3."
         for version in versions:
             if (self._version == version
-                or (isinstance(self._version, collections.Container) 
+                or (isinstance(self._version, collections.abc.Container) 
                     and version in self._version)):
                 return True
         return False
@@ -132,11 +132,6 @@ class Frame(metaclass=abc.ABCMeta):
                                      "to ID3v2.{1} format".format(self.frameid, version))
 
     def _encode(self, encodings=("latin-1", "utf-16")):
-        # if getattr(self, "_bozo", False):
-        #     warn("{0}: Frame type is not widely implemented, "
-        #          "its use is discouraged".format(self.frameid), 
-        #          BozoFrameWarning)
-        
         def encode_fields():
             data = bytearray()
             for spec in self._framespec:
@@ -244,7 +239,7 @@ class TextFrame(Frame):
                 return
             if isinstance(values, str):
                 yield values
-            elif isinstance(values, collections.Iterable):
+            elif isinstance(values, collections.abc.Iterable):
                 for val in values:
                     for v in extract_strs(val):
                         yield v
@@ -271,9 +266,6 @@ class TextFrame(Frame):
 
     def _str_fields(self):
         return ", ".join(repr(t) for t in self.text)
-#        return "{0} {1}".format((EncodedStringSpec._encodings[self.encoding][0] 
-#                                if self.encoding is not None else "<undef>"),
-#                                ", ".join(repr(t) for t in self.text))
 
     @classmethod
     def _merge(cls, frames):
@@ -313,7 +305,7 @@ class PictureFrame(Frame):
                 self.data = file.read()
                 self.type = 0
                 self.desc = ""
-                format = imghdr.what(None, self.data[:32])
+                format = detect_image_format(self.data[:32])
                 if not format:
                     format = value.rpartition(".")[2]
                 self._set_format(format)

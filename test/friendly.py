@@ -322,6 +322,30 @@ class FriendlyTestCase(unittest.TestCase):
             self.assertEqual(tag.picture, "")
             self.assertTrue(APIC not in tag)
 
+    def testPictureConversion(self):
+        """Test PIC to APIC conversion with non-PNG/JPG image formats."""
+        # Create a minimal GIF header (GIF89a)
+        gif_data = b'GIF89a' + b'\x00' * 100
+
+        # Create a PIC frame (ID3v2.2) with GIF format
+        pic = PIC(
+            encoding='latin-1',
+            format='GIF',
+            type=3,
+            desc='Test GIF',
+            data=gif_data
+        )
+
+        # Convert to ID3v2.3 (APIC frame)
+        apic = pic._to_version(3)
+
+        # Verify the conversion worked correctly
+        self.assertIsInstance(apic, APIC)
+        self.assertEqual(apic.mime, 'image/gif')
+        self.assertEqual(apic.type, 3)
+        self.assertEqual(apic.desc, 'Test GIF')
+        self.assertEqual(apic.data, gif_data)
+
     def testComment(self):
         for tagcls, frameid in ((stagger.Tag22, COM), 
                                 (stagger.Tag23, COMM), 

@@ -34,6 +34,7 @@
 import unittest
 import warnings
 
+import stagger
 from stagger.errors import *
 from stagger.specs import *
 from stagger.frames import *

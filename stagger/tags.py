@@ -33,17 +33,17 @@
 import abc
 import struct
 import re
-import collections
+import collections.abc
 import io
-import imghdr
 import zlib
 
-from abc import abstractmethod, abstractproperty
+from abc import abstractmethod
 from warnings import warn
 from contextlib import contextmanager
 
 from stagger.errors import *
 from stagger.conversion import *
+from stagger.util import detect_image_format
 
 import stagger.frames as Frames
 import stagger.fileutil as fileutil
@@ -219,7 +219,7 @@ class FrameOrder:
         return "<FrameOrder: {0}>".format(", ".join(pair[0] for pair in order))
         
 
-class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
+class Tag(collections.abc.MutableMapping, metaclass=abc.ABCMeta):
     known_frames = { }        # Maps known frameids to Frame class objects
 
     frame_order = None        # Initialized by stagger.id3
@@ -316,7 +316,7 @@ class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
             self._frames[key] = [value]
             return
         if self.known_frames[key]._allow_duplicates:
-            if not isinstance(value, collections.Iterable) or isinstance(value, str):
+            if not isinstance(value, collections.abc.Iterable) or isinstance(value, str):
                 raise ValueError("{0} requires a list of frame values".format(key))
             self._frames[key] = [val if isinstance(val, self.known_frames[key])
                                  else self.known_frames[key](val) 
@@ -348,25 +348,138 @@ class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
                         "sort-composer",
                         ]
 
-    title = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    date = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    album_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    album = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    track = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    track_total = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    disc = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    disc_total = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    composer = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    genre = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    comment = abstractproperty(fget=lambda self: Non, fset=lambda self, value: None)
-    grouping = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    picture = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_title = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_album_artist = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_album = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
-    sort_composer = abstractproperty(fget=lambda self: None, fset=lambda self, value: None)
+    @property
+    @abstractmethod
+    def title(self): pass
+    @title.setter
+    @abstractmethod
+    def title(self, value): pass
+
+    @property
+    @abstractmethod
+    def artist(self): pass
+    @artist.setter
+    @abstractmethod
+    def artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def date(self): pass
+    @date.setter
+    @abstractmethod
+    def date(self, value): pass
+
+    @property
+    @abstractmethod
+    def album_artist(self): pass
+    @album_artist.setter
+    @abstractmethod
+    def album_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def album(self): pass
+    @album.setter
+    @abstractmethod
+    def album(self, value): pass
+
+    @property
+    @abstractmethod
+    def track(self): pass
+    @track.setter
+    @abstractmethod
+    def track(self, value): pass
+
+    @property
+    @abstractmethod
+    def track_total(self): pass
+    @track_total.setter
+    @abstractmethod
+    def track_total(self, value): pass
+
+    @property
+    @abstractmethod
+    def disc(self): pass
+    @disc.setter
+    @abstractmethod
+    def disc(self, value): pass
+
+    @property
+    @abstractmethod
+    def disc_total(self): pass
+    @disc_total.setter
+    @abstractmethod
+    def disc_total(self, value): pass
+
+    @property
+    @abstractmethod
+    def composer(self): pass
+    @composer.setter
+    @abstractmethod
+    def composer(self, value): pass
+
+    @property
+    @abstractmethod
+    def genre(self): pass
+    @genre.setter
+    @abstractmethod
+    def genre(self, value): pass
+
+    @property
+    @abstractmethod
+    def comment(self): pass
+    @comment.setter
+    @abstractmethod
+    def comment(self, value): pass
+
+    @property
+    @abstractmethod
+    def grouping(self): pass
+    @grouping.setter
+    @abstractmethod
+    def grouping(self, value): pass
+
+    @property
+    @abstractmethod
+    def picture(self): pass
+    @picture.setter
+    @abstractmethod
+    def picture(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_title(self): pass
+    @sort_title.setter
+    @abstractmethod
+    def sort_title(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_artist(self): pass
+    @sort_artist.setter
+    @abstractmethod
+    def sort_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_album_artist(self): pass
+    @sort_album_artist.setter
+    @abstractmethod
+    def sort_album_artist(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_album(self): pass
+    @sort_album.setter
+    @abstractmethod
+    def sort_album(self, value): pass
+
+    @property
+    @abstractmethod
+    def sort_composer(self): pass
+    @sort_composer.setter
+    @abstractmethod
+    def sort_composer(self, value): pass
 
     def __friendly_text_collect(self, frameid):
         """Collect text values from all instances of FRAMEID into a single list.
@@ -484,8 +597,8 @@ class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
         try:
             time = self.__friendly_text_collect(timeframe)[0]
             m = re.match(r"\s*(?P<hour>[0-2][0-9])\s*:?\s*"
-                         "(?P<minute>[0-5][0-9])\s*:?\s*"
-                         "(?P<second>[0-5][0-9])?\s*$", time)
+                         r"(?P<minute>[0-5][0-9])\s*:?\s*"
+                         r"(?P<second>[0-5][0-9])?\s*$", time)
             if m is not None:
                 hour = int(m.group("hour"))
                 minute = int(m.group("minute"))
@@ -516,7 +629,7 @@ class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
                                  .format(f._spec("type").to_str(f.type),
                                          f.desc,
                                          len(f.data),
-                                         imghdr.what(None, f.data[:32]))
+                                         detect_image_format(f.data[:32]))
                                  for f in self[frameid])
         def setter(self, value):
             if len(value) > 0:
@@ -678,7 +791,7 @@ class Tag(collections.MutableMapping, metaclass=abc.ABCMeta):
             try:
                 data = data.encode("ASCII")
             except UnicodeEncodeError:
-                return false
+                return False
         # Allow a single space at end of four-character ids
         # Some programs (e.g. iTunes 8.2) generate such frames when converting
         # from 2.2 to 2.3/2.4 tags.
